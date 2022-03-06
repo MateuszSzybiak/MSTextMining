@@ -43,9 +43,7 @@ def remove_stop_words(text: str) -> str:
 
 
 def stemming(text: str) -> list:
-    result_list = []
     list_of_words = text.split(" ")
     porter = PorterStemmer()
-    for word in list_of_words:
-        result_list.append(porter.stem(word))
+    result_list = [porter.stem(word) for word in list_of_words]
     return result_list
