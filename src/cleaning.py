@@ -37,14 +37,12 @@ def cleaning_text(text: str) -> str:
 def remove_stop_words(text: str) -> list:
     stop_words = set(stopwords.words('english'))
     list_of_words = text.split(" ")
-    filtered_list = [word for word in list_of_words if word not in stop_words]
-    return filtered_list
+    return [word for word in list_of_words if word not in stop_words]
 
 
 def stemming(list_of_words: list) -> list:
     porter = PorterStemmer()
-    result_list = [porter.stem(word) for word in list_of_words]
-    return result_list
+    return [porter.stem(word) for word in list_of_words]
 
 
 def bag_of_words(words: list) -> dict:
