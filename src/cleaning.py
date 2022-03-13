@@ -34,16 +34,14 @@ def cleaning_text(text: str) -> str:
     return ret_text
 
 
-def remove_stop_words(text: str) -> str:
+def remove_stop_words(text: str) -> list:
     stop_words = set(stopwords.words('english'))
     list_of_words = text.split(" ")
     filtered_list = [word for word in list_of_words if word not in stop_words]
-    ret_text = " ".join(filtered_list)
-    return ret_text
+    return filtered_list
 
 
-def stemming(text: str) -> list:
-    list_of_words = text.split(" ")
+def stemming(list_of_words: list) -> list:
     porter = PorterStemmer()
     result_list = [porter.stem(word) for word in list_of_words]
     return result_list
