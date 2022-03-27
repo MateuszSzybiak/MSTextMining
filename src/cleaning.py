@@ -34,9 +34,9 @@ def cleaning_text(text: str) -> str:
     return ret_text
 
 
-def remove_stop_words(text: str) -> list:
+def remove_stop_words(text: list) -> list:
     stop_words = set(stopwords.words('english'))
-    list_of_words = text.split(" ")
+    list_of_words = text
     return [word for word in list_of_words if word not in stop_words]
 
 
@@ -53,3 +53,13 @@ def bag_of_words(words: list) -> dict:
         else:
             bow[word] += 1
     return bow
+
+
+def text_tokenizer(text: str) -> list:
+    text_working = text
+    text_working = cleaning_text(text_working)
+    text_working_list = text_working.split(" ")
+    text_working_list = stemming(text_working_list)
+    text_working_list = remove_stop_words(text_working_list)
+
+    return [word for word in text_working_list if len(word) > 3]
