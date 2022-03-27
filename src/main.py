@@ -10,7 +10,7 @@ from wordcloud import WordCloud
 from tqdm import tqdm
 
 
-df = pd.read_csv(r"D:\Pliki\Studia II stopnia\Semestr II\Text mining\News _dataset\True.csv")
+df = pd.read_csv(r"D:\Studia\Python\News_dataset\True.csv")
 
 string = ""
 for i in tqdm(range(len(df['title']))):
