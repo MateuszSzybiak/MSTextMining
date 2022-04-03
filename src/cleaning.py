@@ -1,4 +1,5 @@
 import re
+import numpy as np
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
@@ -63,3 +64,23 @@ def text_tokenizer(text: str) -> list:
     text_working_list = remove_stop_words(text_working_list)
 
     return [word for word in text_working_list if len(word) > 3]
+
+
+def top_tokens(list_of_tokens: list, token_words: list, how_many: int = 10) -> list:
+    working_list = list_of_tokens.copy()
+    result = []
+    for i in range(how_many):
+        token_index = np.argmax(working_list)
+        result.append(token_words[token_index])
+        working_list[token_index] = 0
+    return result
+
+
+def top_documents(list_of_documents: list, how_many: int = 10) -> list:
+    working_list = list_of_documents.copy()
+    result = []
+    for i in range(how_many):
+        token_index = np.argmax(working_list)
+        result.append(token_index)
+        working_list[token_index] = 0
+    return result
