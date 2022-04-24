@@ -2,35 +2,34 @@ from src.cleaning import (
     text_tokenizer,
     top_tokens,
     top_documents,
-    # stemming,
-    # cleaning_text,
-    # remove_stop_words
+    stemming,
+    cleaning_text,
+    remove_stop_words,
+    bag_of_words
     )
 import pandas as pd
+from tqdm import tqdm
 from sklearn.feature_extraction.text import (
     TfidfVectorizer,
     CountVectorizer
     )
 
 
-df = pd.read_csv(r"D:\Studia\Python\News_dataset\True.csv")
+df_true = pd.read_csv(r"D:\Studia\Python\News_dataset\True.csv")
+string = ""
+for i in tqdm(range(len(df_true['title']))):
+    string += df_true['title'].iloc[i] + " "
 
-vectorizer = CountVectorizer(tokenizer=text_tokenizer)
-X_transform = vectorizer.fit_transform(df['title'])
+stemmed_text_true = stemming(remove_stop_words(cleaning_text(string).split()))
+bow_true = bag_of_words(stemmed_text_true)
 
-vectorizer_tfidf = TfidfVectorizer(tokenizer=text_tokenizer)
-transform_tfidf = vectorizer_tfidf.fit_transform(df['title'])
-# print(X_transform.toarray())
-# print(vectorizer.get_feature_names_out())
+df_fake = pd.read_csv(r"D:\Studia\Python\News_dataset\Fake.csv")
+string = ""
+for i in tqdm(range(len(df_fake['title']))):
+    string += df_fake['title'].iloc[i] + " "
 
-# Top 10 occurring tokens
-print("Top 10 occurring tokens")
-print(top_tokens(X_transform.toarray().sum(axis=0), vectorizer.get_feature_names_out(), 10))
+stemmed_text_fake = stemming(remove_stop_words(cleaning_text(string).split()))
+bow_fake = bag_of_words(stemmed_text_fake)
 
-# Top 10 most important tokens
-print("Top 10 most important tokens")
-print(top_tokens(transform_tfidf.toarray().sum(axis=0), vectorizer_tfidf.get_feature_names_out(), 10))
-
-# Top 10 documents
-print("Top 10 documents")
-print(top_documents(X_transform.toarray().sum(axis=1), 10))
+only_true = {k: bow_true[k] for k in set(bow_true) - set(bow_fake)}
+print(only_true)
