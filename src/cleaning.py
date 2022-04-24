@@ -122,3 +122,29 @@ def pretty_table(words: dict, title: str):
     for i, j in zip(keys, values):
         result.add_row([i, j])
     print(result)
+
+
+def plot_most_important(words: list, bow: dict, title: str):
+    keys = words[::-1]
+    values = [bow[i] for i in words][::-1]
+
+    y_pos = np.arange(len(keys))
+
+    fig, ax = plt.subplots()
+
+    ax.barh(y_pos, values, align='center')
+    ax.set_yticks(y_pos, labels=keys)
+    ax.set_title(f"Kluczowe tokeny fałszywych wiadomości na podstawie {title}")
+    plt.show()
+
+
+def pretty_table_most_important(words: list, bow: dict, title: str):
+    result = PrettyTable()
+
+    result.field_names = ["Term", "Count"]
+    keys = words
+    values = [bow[i] for i in words]
+    result.title = f"Kluczowe tokeny fałszywych wiadomości na podstawie {title}"
+    for i, j in zip(keys, values):
+        result.add_row([i, j])
+    print(result)
