@@ -1,5 +1,7 @@
 import re
 import numpy as np
+import matplotlib.pyplot as plt
+from prettytable import PrettyTable
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
@@ -84,3 +86,39 @@ def top_documents(list_of_documents: list, how_many: int = 10) -> list:
         result.append(token_index)
         working_list[token_index] = 0
     return result
+
+
+def top_dict(word_dict: dict, how_many: int = 15) -> dict:
+    working_dict = word_dict.copy()
+    result = {}
+    while len(result) < how_many:
+        max_value = max(working_dict, key=working_dict.get)
+        if len(max_value) > 3:
+            result[max_value] = working_dict[max_value]
+        working_dict[max_value] = 0
+    return result
+
+
+def plot(words: dict, title: str):
+    keys = [i for i in words.keys()][::-1]
+    values = [i for i in words.values()][::-1]
+    y_pos = np.arange(len(keys))
+
+    fig, ax = plt.subplots()
+
+    ax.barh(y_pos, values, align='center')
+    ax.set_yticks(y_pos, labels=keys)
+    ax.set_title(f"Tokeny występujące tylko w {title} wiadomościach")
+    plt.show()
+
+
+def pretty_table(words: dict, title: str):
+    result = PrettyTable()
+
+    result.field_names = ["Term", "Count"]
+    keys = [i for i in words.keys()]
+    values = [i for i in words.values()]
+    result.title = f"Tokeny występujące tylko w {title} wiadomościach"
+    for i, j in zip(keys, values):
+        result.add_row([i, j])
+    print(result)
