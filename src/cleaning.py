@@ -1,5 +1,6 @@
 import re
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 from prettytable import PrettyTable
 from nltk.corpus import stopwords
@@ -147,4 +148,28 @@ def pretty_table_most_important(words: list, bow: dict, title: str):
     result.title = f"Kluczowe tokeny fałszywych wiadomości na podstawie {title}"
     for i, j in zip(keys, values):
         result.add_row([i, j])
+    print(result)
+
+
+def key_plot(columns: list, weights: list):
+    highest_weights = np.argpartition(weights, -10)[-10:]
+    key_tokens = columns[highest_weights]
+    key_weight = weights[highest_weights]
+    dframe = pd.DataFrame({"Tokens": key_tokens, "TFIDF": key_weight})
+    dframe.sort_values(by=["TFIDF"], inplace=True)
+    dframe.plot(kind="barh", x="Tokens", y='TFIDF', title="Kluczowe tokeny według miary TFIDF")
+    plt.show()
+
+
+def pretty_table_key(columns: list, weights: list):
+    result = PrettyTable()
+    result.field_names = ["Term", "Weight"]
+    highest_weights = np.argpartition(weights, -10)[-10:]
+    key_tokens = columns[highest_weights]
+    key_weight = weights[highest_weights]
+    result.title = "Kluczowe tokeny według miary TFIDF"
+    dframe = pd.DataFrame({"Tokens": key_tokens, "TFIDF": key_weight})
+    dframe.sort_values(by=["TFIDF"], ascending=False, inplace=True)
+    for index, row in dframe.iterrows():
+        result.add_row([row["Tokens"], row["TFIDF"]])
     print(result)
